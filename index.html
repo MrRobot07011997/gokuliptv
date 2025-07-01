@@ -178,13 +178,67 @@
                 font-size: 1em;
             }
         }
+
+        /* Preloader Styles */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #1b1b1b 60%, #ff9900 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.6s cubic-bezier(0.4,0,0.2,1);
+        }
+        #preloader.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .preloader-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid #fff;
+            border-top: 6px solid #ff9900;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px #ff9900;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .preloader-text {
+            font-size: 2.2em;
+            font-weight: bold;
+            color: #fff;
+            letter-spacing: 0.15em;
+            text-shadow: 2px 2px 8px #ff9900, 0 0 10px #fff;
+            font-family: 'Arial Black', Arial, sans-serif;
+        }
     </style>
 </head>
 <body oncontextmenu="return false">
+    <!-- Preloader Start -->
+    <div id="preloader">
+        <div class="preloader-content">
+            <div class="spinner"></div>
+            <div class="preloader-text">GK TV</div>
+        </div>
+    </div>
+    <!-- Preloader End -->
     <div class="container">
         <div class="video-container">
             <video id="lw-player-04" class="video-js vjs-default-skin" controls preload="auto" autoplay muted poster="https://ui.dmpcdn.com/tvbox-web-cdn/imgs/social/premier-league.jpg" data-setup='{}'>
-                <source id="video-source" src="https://keela2.com/stream/8/index.m3u8?token=mvFWafOIir5JDlQN" type="application/x-mpegURL">
+                <source id="video-source" src="https://live444.xyz/stream/71/index.m3u8" type="application/x-mpegURL">
                 Your browser does not support the video tag.
             </video>
         </div>
@@ -368,6 +422,30 @@
             e.preventDefault();
             return false;
         });
+
+        // Preloader hide logic
+        (function() {
+            var preloader = document.getElementById('preloader');
+            var minPreloadTime = 3000; // 3 seconds
+            var preloadStart = Date.now();
+            window.addEventListener('load', function() {
+                var elapsed = Date.now() - preloadStart;
+                var remaining = minPreloadTime - elapsed;
+                if (remaining > 0) {
+                    setTimeout(hidePreloader, remaining);
+                } else {
+                    hidePreloader();
+                }
+            });
+            function hidePreloader() {
+                if (preloader) {
+                    preloader.classList.add('hide');
+                    setTimeout(function() {
+                        preloader.style.display = 'none';
+                    }, 700);
+                }
+            }
+        })();
     </script>
 </body>
 </html>
